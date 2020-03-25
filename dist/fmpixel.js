@@ -1,4 +1,4 @@
-// Feedmob Pixel
+// Feedmob Tracking Pixel
 ;(function(window, document, pixelFunc, pixelFuncName, pixelEndpoint, versionNumber) {
 "use strict";
 
@@ -377,4 +377,4 @@ window.onload = function () {
     }.bind(aTags[i]));
   }
 };
-}(window, document, window["opix"], "opix", "http://feedmob.haoxilu.com:3000/pixel.gif", 1));
+}(window, document, window["fmpix"], "fmpix", "https://pixel-api.feedmob.biz/tracker", 1));

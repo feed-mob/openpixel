@@ -43,7 +43,7 @@ Openpixel needs to be customized for your needs before you can start using it. L
 2. Install openpixel `npm i openpixel`
 3. Install the dependencies for compiling openpixel via the command line with `npm install`
 4. Update the variables at the top of the `gulpfile.js` for your custom configurations. Each configuration has comments explaining it.
-5. Run gulp via the command `npm run gulp`.
+5. Run gulp via the command `npm run gulp build`.
 
 The core files and the snippet are located under the `src/` directory. If you are working on those files you can run `npm run watch` and that will watch for any files changed in the `src/` directory and rerun gulp to recompile these files and drop them in the `dist/` directory.
 

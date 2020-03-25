@@ -1,19 +1,19 @@
 // ---------- Configurations for your custom build of open pixel ---------- //
 
 // This is the header comment that will be included at the top of the "dist/openpixel.js" file
-var HEADER_COMMENT     = process.env.OPIX_HEADER_COMMENT || '// Feedmob Pixel\n';
+var HEADER_COMMENT     = process.env.OPIX_HEADER_COMMENT || '// Feedmob Tracking Pixel\n';
 
 // This is where the compiled snippet and openpixel.js files will be dropped
 var DESTINATION_FOLDER = process.env.OPIX_DESTINATION_FOLDER || './dist';
 
 // The name of the global function and the cookie prefix that will be included in the snippet and is the client to fire off custom events
-var PIXEL_FUNC_NAME    = process.env.OPIX_PIXEL_FUNC_NAME || 'opix';
+var PIXEL_FUNC_NAME    = process.env.OPIX_PIXEL_FUNC_NAME || 'fmpix';
 
 // The remote URL of the pixel.gif file that will be pinged by the browser to send tracking information
-var PIXEL_ENDPOINT     = process.env.OPIX_PIXEL_ENDPOINT || 'http://feedmob.haoxilu.com:3000/pixel.gif';
+var PIXEL_ENDPOINT     = process.env.OPIX_PIXEL_ENDPOINT || 'https://pixel-api.feedmob.biz/tracker';
 
 // The core openpixel.min.js file that the snippet will loaded asynchronously into the browser
-var JS_ENDPOINT        = process.env.OPIX_JS_ENDPOINT || 'http://feedmob.haoxilu.com:3000/openpixel.js';
+var JS_ENDPOINT        = process.env.OPIX_JS_ENDPOINT || 'https://feedmob-cdn.s3.amazonaws.com/js/fmpixel.js';
 
 // The current version of your openpixel configuration
 var VERSION            = process.env.OPIX_VERSION || '1';
@@ -41,7 +41,7 @@ function openpixel() {
     './src/pixel.js',
     './src/setup.js',
   ])
-  .pipe(concat('openpixel.js'))
+  .pipe(concat('fmpixel.js'))
   .pipe(babel())
   .pipe(iife({
     useStrict: false,
@@ -65,8 +65,8 @@ function snippet() {
   .pipe(inject.replace('opix_func', PIXEL_FUNC_NAME))
   // This will minify and rename to pressure.min.js
   .pipe(uglify())
-  .pipe(inject.prepend('<!-- Start Open Pixel Snippet -->\n<script>\n'))
-  .pipe(inject.append('\n</script>\n<!-- End Open Pixel Snippet -->'))
+  .pipe(inject.prepend('<!-- Start Feedmob Pixel Snippet -->\n<script>\n'))
+  .pipe(inject.append('\n</script>\n<!-- End Feedmob Pixel Snippet -->'))
   .pipe(rename({ extname: '.html' }))
   .pipe(gulp.dest(DESTINATION_FOLDER));
 }
