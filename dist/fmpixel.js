@@ -148,6 +148,38 @@ var Cookie = {
       var utms = JSON.parse(this.get('utm'));
       return name in utms ? utms[name] : "";
     }
+  },
+  setFms: function setFms() {
+    var fmArray = ['fm_click_id', 'fm_publisher_id', 'fm_conversion_id'];
+    var exists = false;
+
+    for (var i = 0, l = fmArray.length; i < l; i++) {
+      if (isset(Url.getParameterByName(fmArray[i]))) {
+        exists = true;
+        break;
+      }
+    }
+
+    if (exists) {
+      var val,
+          save = {};
+
+      for (var i = 0, l = fmArray.length; i < l; i++) {
+        val = Url.getParameterByName(fmArray[i]);
+
+        if (isset(val)) {
+          save[fmArray[i]] = val;
+        }
+      }
+
+      this.set('fm', JSON.stringify(save), 2 * 365 * 24 * 60);
+    }
+  },
+  getFm: function getFm(name) {
+    if (this.exists('fm')) {
+      var fms = JSON.parse(this.get('fm'));
+      return name in fms ? fms[name] : "";
+    }
   }
 };
 var Url = {
@@ -281,7 +313,19 @@ var Pixel = /*#__PURE__*/function () {
         // get the utm content
         utm_campaign: function utm_campaign(key) {
           return Cookie.getUtm(key);
-        } // get the utm campaign
+        },
+        // get the utm campaign
+        fm_click_id: function fm_click_id(key) {
+          return Cookie.getUtm(key);
+        },
+        // get the Feedmob Click Id
+        fm_publisher_id: function fm_publisher_id(key) {
+          return Cookie.getUtm(key);
+        },
+        // get the Feedmob Publisher Id
+        fm_conversion_id: function fm_conversion_id(key) {
+          return Cookie.getUtm(key);
+        } // get the Feedmob Conversion Id
 
       };
     }
