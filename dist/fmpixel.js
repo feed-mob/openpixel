@@ -316,15 +316,15 @@ var Pixel = /*#__PURE__*/function () {
         },
         // get the utm campaign
         fm_click_id: function fm_click_id(key) {
-          return Cookie.getUtm(key);
+          return Cookie.getFm(key);
         },
         // get the Feedmob Click Id
         fm_publisher_id: function fm_publisher_id(key) {
-          return Cookie.getUtm(key);
+          return Cookie.getFm(key);
         },
         // get the Feedmob Publisher Id
         fm_conversion_id: function fm_conversion_id(key) {
-          return Cookie.getUtm(key);
+          return Cookie.getFm(key);
         } // get the Feedmob Conversion Id
 
       };
@@ -371,7 +371,9 @@ var Pixel = /*#__PURE__*/function () {
 
 Cookie.exists('uid') ? Cookie.set('uid', Cookie.get('uid'), 2 * 365 * 24 * 60) : Cookie.set('uid', guid(), 2 * 365 * 24 * 60); // save any utms through as session cookies
 
-Cookie.setUtms(); // process the queue and future incoming commands
+Cookie.setUtms(); //save any feedmob parameters to cookies
+
+Cookie.setFms(); // process the queue and future incoming commands
 
 pixelFunc.process = function (method, value, optional) {
   if (method == 'init') {

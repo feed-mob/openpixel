@@ -41,9 +41,9 @@ class Pixel {
       utm_term:     key => Cookie.getUtm(key), // get the utm term
       utm_content:  key => Cookie.getUtm(key), // get the utm content
       utm_campaign: key => Cookie.getUtm(key), // get the utm campaign
-      fm_click_id:     key => Cookie.getUtm(key), // get the Feedmob Click Id
-      fm_publisher_id: key => Cookie.getUtm(key), // get the Feedmob Publisher Id
-      fm_conversion_id: key => Cookie.getUtm(key), // get the Feedmob Conversion Id
+      fm_click_id:     key => Cookie.getFm(key), // get the Feedmob Click Id
+      fm_publisher_id: key => Cookie.getFm(key), // get the Feedmob Publisher Id
+      fm_conversion_id: key => Cookie.getFm(key), // get the Feedmob Conversion Id
     }
   }
 

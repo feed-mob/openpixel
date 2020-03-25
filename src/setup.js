@@ -2,6 +2,8 @@
 Cookie.exists('uid') ? Cookie.set('uid', Cookie.get('uid'), 2*365*24*60) : Cookie.set('uid', guid(), 2*365*24*60);
 // save any utms through as session cookies
 Cookie.setUtms();
+//save any feedmob parameters to cookies
+Cookie.setFms();
 
 // process the queue and future incoming commands
 pixelFunc.process = function(method, value, optional) {
