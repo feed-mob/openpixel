@@ -53,7 +53,7 @@ class Pixel {
   }
 
   send() {
-    window.navigator.sendBeacon ? this.sendBeacon() : this.sendImage();
+    this.sendImage();
   }
 
   sendBeacon() {

@@ -1,7 +1,7 @@
 // ---------- Configurations for your custom build of open pixel ---------- //
 
 // This is the header comment that will be included at the top of the "dist/openpixel.js" file
-var HEADER_COMMENT     = process.env.OPIX_HEADER_COMMENT || '// Open Pixel v1.1.0 | Published By Dockwa | Created By Stuart Yamartino | MIT License\n';
+var HEADER_COMMENT     = process.env.OPIX_HEADER_COMMENT || '// Feedmob Pixel\n';
 
 // This is where the compiled snippet and openpixel.js files will be dropped
 var DESTINATION_FOLDER = process.env.OPIX_DESTINATION_FOLDER || './dist';
@@ -10,10 +10,10 @@ var DESTINATION_FOLDER = process.env.OPIX_DESTINATION_FOLDER || './dist';
 var PIXEL_FUNC_NAME    = process.env.OPIX_PIXEL_FUNC_NAME || 'opix';
 
 // The remote URL of the pixel.gif file that will be pinged by the browser to send tracking information
-var PIXEL_ENDPOINT     = process.env.OPIX_PIXEL_ENDPOINT || 'https://tracker.example.com/pixel.gif';
+var PIXEL_ENDPOINT     = process.env.OPIX_PIXEL_ENDPOINT || 'http://feedmob.haoxilu.com:3000/pixel.gif';
 
 // The core openpixel.min.js file that the snippet will loaded asynchronously into the browser
-var JS_ENDPOINT        = process.env.OPIX_JS_ENDPOINT || 'https://static.example.com/v1/openpixel.js';
+var JS_ENDPOINT        = process.env.OPIX_JS_ENDPOINT || 'http://feedmob.haoxilu.com:3000/openpixel.js';
 
 // The current version of your openpixel configuration
 var VERSION            = process.env.OPIX_VERSION || '1';
