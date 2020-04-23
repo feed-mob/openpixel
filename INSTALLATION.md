@@ -61,6 +61,8 @@ https://feedmob-cdn.s3.amazonaws.com/pages/pixel.html?utm_source=FeedMob_{FEEDMO
 ```
 
 - The parameters below are supported in MMP Tracking Link.
+   - :warning: `utm_source`, `fm_publisher_id`, `fm_conversion_id` are required parameters.
+   - :warning: The value of `utm_source` must be started with `FeedMob`, such as `FeedMob_Test_ABC`
 ```
 utm_source
 utm_medium
