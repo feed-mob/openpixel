@@ -1,9 +1,9 @@
 // update the cookie if it exists, if it doesn't, create a new one, lasting 2 years
-Cookie.exists('uid') ? Cookie.set('uid', Cookie.get('uid'), 2*365*24*60) : Cookie.set('uid', guid(), 2*365*24*60);
+Storage().exists('uid') ? Storage().set('uid', Storage().get('uid'), 2*365*24*60) : Storage().set('uid', guid(), 2*365*24*60);
 // save any utms through as session cookies
-Cookie.setUtms();
+Storage().setUtms();
 //save any feedmob parameters to cookies
-Cookie.setFms();
+Storage().setFms();
 
 // process the queue and future incoming commands
 pixelFunc.process = function(method, value, optional) {

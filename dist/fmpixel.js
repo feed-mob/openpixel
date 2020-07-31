@@ -8,7 +8,7 @@ function _defineProperties(target, props) { for (var i = 0; i < props.length; i+
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
-function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 var Config = {
   id: '',
@@ -29,6 +29,29 @@ var guid = function guid() {
         v = c == 'x' ? r : r & 0x3 | 0x8;
     return v.toString(36);
   }) + (1 * new Date()).toString(36);
+};
+
+var checkCookie = function checkCookie() {
+  // Quick test if browser has cookieEnabled host property
+  if (navigator.cookieEnabled) return true; // Create cookie
+
+  document.cookie = "cookietest=1";
+  var ret = document.cookie.indexOf("cookietest=") != -1; // Delete cookie
+
+  document.cookie = "cookietest=1; expires=Thu, 01-Jan-1970 00:00:01 GMT";
+  return ret;
+};
+
+var Storage = function Storage() {
+  console.info(checkCookie());
+
+  if (checkCookie()) {
+    console.info("=========Cookie");
+    return Cookie;
+  } else {
+    console.info("=========Local");
+    return LocalStorage;
+  }
 }; // reduces all optional data down to a string
 
 
@@ -182,6 +205,53 @@ var Cookie = {
     }
   }
 };
+var LocalStorage = {
+  set: function set(name, value, minutes) {
+    var path = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : "/";
+    localStorage.setItem(name, value);
+  },
+  get: function get(name) {
+    localStorage.getItem(name);
+  },
+  "delete": function _delete(name) {
+    localStorage.removeItem(name);
+  },
+  exists: function exists(name) {
+    return this.get(name);
+  },
+  setUtms: function setUtms() {
+    var utmArray = ['utm_source', 'utm_medium', 'utm_term', 'utm_content', 'utm_campaign'];
+    var exists = false;
+
+    for (var i = 0, l = utmArray.length; i < l; i++) {
+      if (isset(Url.getParameterByName(utmArray[i]))) {
+        exists = true;
+        break;
+      }
+    }
+
+    if (exists) {
+      var val,
+          save = {};
+
+      for (var i = 0, l = utmArray.length; i < l; i++) {
+        val = Url.getParameterByName(utmArray[i]);
+
+        if (isset(val)) {
+          save[utmArray[i]] = val;
+        }
+      }
+
+      localStorage.set('utm', JSON.stringify(save));
+    }
+  },
+  getUtm: function getUtm(name) {
+    if (localStorage.getItem('utm')) {
+      var utms = JSON.parse(localStorage.getItem('utm'));
+      return name in utms ? utms[name] : "";
+    }
+  }
+};
 var Url = {
   // http://stackoverflow.com/a/901144/1231563
   getParameterByName: function getParameterByName(name, url) {
@@ -198,7 +268,9 @@ var Url = {
   }
 };
 
-var Pixel = /*#__PURE__*/function () {
+var Pixel =
+/*#__PURE__*/
+function () {
   function Pixel(event, timestamp, optional) {
     _classCallCheck(this, Pixel);
 
@@ -232,7 +304,7 @@ var Pixel = /*#__PURE__*/function () {
         },
         // website Id
         uid: function uid() {
-          return Cookie.get('uid');
+          return Storage().get('uid');
         },
         // user Id
         ev: function ev() {
@@ -296,35 +368,35 @@ var Pixel = /*#__PURE__*/function () {
         },
         // timezone
         utm_source: function utm_source(key) {
-          return Cookie.getUtm(key);
+          return Storage().getUtm(key);
         },
         // get the utm source
         utm_medium: function utm_medium(key) {
-          return Cookie.getUtm(key);
+          return Storage().getUtm(key);
         },
         // get the utm medium
         utm_term: function utm_term(key) {
-          return Cookie.getUtm(key);
+          return Storage().getUtm(key);
         },
         // get the utm term
         utm_content: function utm_content(key) {
-          return Cookie.getUtm(key);
+          return Storage().getUtm(key);
         },
         // get the utm content
         utm_campaign: function utm_campaign(key) {
-          return Cookie.getUtm(key);
+          return Storage().getUtm(key);
         },
         // get the utm campaign
         fm_click_id: function fm_click_id(key) {
-          return Cookie.getFm(key);
+          return Storage().getFm(key);
         },
         // get the Feedmob Click Id
         fm_publisher_id: function fm_publisher_id(key) {
-          return Cookie.getFm(key);
+          return Storage().getFm(key);
         },
         // get the Feedmob Publisher Id
         fm_conversion_id: function fm_conversion_id(key) {
-          return Cookie.getFm(key);
+          return Storage().getFm(key);
         } // get the Feedmob Conversion Id
 
       };
@@ -369,11 +441,11 @@ var Pixel = /*#__PURE__*/function () {
 }(); // update the cookie if it exists, if it doesn't, create a new one, lasting 2 years
 
 
-Cookie.exists('uid') ? Cookie.set('uid', Cookie.get('uid'), 2 * 365 * 24 * 60) : Cookie.set('uid', guid(), 2 * 365 * 24 * 60); // save any utms through as session cookies
+Storage().exists('uid') ? Storage().set('uid', Storage().get('uid'), 2 * 365 * 24 * 60) : Storage().set('uid', guid(), 2 * 365 * 24 * 60); // save any utms through as session cookies
 
-Cookie.setUtms(); //save any feedmob parameters to cookies
+Storage().setUtms(); //save any feedmob parameters to cookies
 
-Cookie.setFms(); // process the queue and future incoming commands
+Storage().setFms(); // process the queue and future incoming commands
 
 pixelFunc.process = function (method, value, optional) {
   if (method == 'init') {

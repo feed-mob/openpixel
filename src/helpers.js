@@ -14,6 +14,28 @@ var guid = function() {
   }) + (1 * new Date()).toString(36);
 }
 
+var checkCookie = function (){
+  // Quick test if browser has cookieEnabled host property
+  if (navigator.cookieEnabled) return true;
+  // Create cookie
+  document.cookie = "cookietest=1";
+  var ret = document.cookie.indexOf("cookietest=") != -1;
+  // Delete cookie
+  document.cookie = "cookietest=1; expires=Thu, 01-Jan-1970 00:00:01 GMT";
+  return ret;
+}
+
+var Storage = function () {
+  console.info(checkCookie())
+  if (checkCookie()) {
+    console.info("=========Cookie")
+    return Cookie;
+  }else{
+    console.info("=========Local")
+    return LocalStorage;
+  }
+}
+
 // reduces all optional data down to a string
 var optionalData = function(data) {
   if (isset(data) === false) {

@@ -37,6 +37,7 @@ function openpixel() {
     './src/helpers.js',
     './src/browser.js',
     './src/cookie.js',
+    './src/local_storage.js',
     './src/url.js',
     './src/pixel.js',
     './src/setup.js',
