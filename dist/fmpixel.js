@@ -43,13 +43,9 @@ var checkCookie = function checkCookie() {
 };
 
 var Storage = function Storage() {
-  console.info(checkCookie());
-
   if (checkCookie()) {
-    console.info("=========Cookie");
     return Cookie;
   } else {
-    console.info("=========Local");
     return LocalStorage;
   }
 }; // reduces all optional data down to a string
@@ -211,13 +207,13 @@ var LocalStorage = {
     localStorage.setItem(name, value);
   },
   get: function get(name) {
-    localStorage.getItem(name);
+    return localStorage.getItem(name);
   },
   "delete": function _delete(name) {
     localStorage.removeItem(name);
   },
   exists: function exists(name) {
-    return this.get(name);
+    return isset(this.get(name));
   },
   setUtms: function setUtms() {
     var utmArray = ['utm_source', 'utm_medium', 'utm_term', 'utm_content', 'utm_campaign'];
@@ -242,13 +238,45 @@ var LocalStorage = {
         }
       }
 
-      localStorage.set('utm', JSON.stringify(save));
+      this.set('utm', JSON.stringify(save));
     }
   },
   getUtm: function getUtm(name) {
-    if (localStorage.getItem('utm')) {
-      var utms = JSON.parse(localStorage.getItem('utm'));
+    if (this.exists('utm')) {
+      var utms = JSON.parse(this.get('utm'));
       return name in utms ? utms[name] : "";
+    }
+  },
+  setFms: function setFms() {
+    var fmArray = ['fm_click_id', 'fm_publisher_id', 'fm_conversion_id'];
+    var exists = false;
+
+    for (var i = 0, l = fmArray.length; i < l; i++) {
+      if (isset(Url.getParameterByName(fmArray[i]))) {
+        exists = true;
+        break;
+      }
+    }
+
+    if (exists) {
+      var val,
+          save = {};
+
+      for (var i = 0, l = fmArray.length; i < l; i++) {
+        val = Url.getParameterByName(fmArray[i]);
+
+        if (isset(val)) {
+          save[fmArray[i]] = val;
+        }
+      }
+
+      this.set('fm', JSON.stringify(save), 2 * 365 * 24 * 60);
+    }
+  },
+  getFm: function getFm(name) {
+    if (this.exists('fm')) {
+      var fms = JSON.parse(this.get('fm'));
+      return name in fms ? fms[name] : "";
     }
   }
 };

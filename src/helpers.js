@@ -26,12 +26,9 @@ var checkCookie = function (){
 }
 
 var Storage = function () {
-  console.info(checkCookie())
   if (checkCookie()) {
-    console.info("=========Cookie")
     return Cookie;
   }else{
-    console.info("=========Local")
     return LocalStorage;
   }
 }
