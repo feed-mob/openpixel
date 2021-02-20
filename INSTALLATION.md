@@ -23,7 +23,7 @@ Date/864e5),(c=t.getElementsByTagName(n)[0]).parentNode.insertBefore(p,c))}(wind
 
 - The Examples of Feedmob Pixel Events
 ```Javascript
-// Purchase Event
+// Purchase Event # 100 cents
 fmpix('event', 'P', '{ "amount": 100 }')
 
 // Install Event
