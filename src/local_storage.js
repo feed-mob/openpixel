@@ -67,7 +67,7 @@ var LocalStorage = {
   },
 
   getFm(name) {
-     if (this.exists('fm')) {
+    if (this.exists('fm')) {
       var fms = JSON.parse(this.get('fm'));
       return name in fms ? fms[name] : "";
     }
