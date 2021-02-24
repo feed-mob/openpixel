@@ -16,7 +16,7 @@ var GeneralStorage = {
   getUid() {
     var uid = Cookie.get('uid');
 
-    return isset(uid) === false ? GeneralStorage.get('uid') : uid;
+    return isset(uid) === false ? LocalStorage.get('uid') : uid;
   },
 
   setUtms() {

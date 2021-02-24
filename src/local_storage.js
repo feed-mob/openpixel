@@ -4,19 +4,19 @@ var LocalStorage = {
   },
 
   set(name, value) {
-    document.localStorage.setItem(this.prefix() + name, value);
+    localStorage.setItem(this.prefix() + name, value);
   },
 
   get(name) {
-    return document.localStorage.getItem(this.prefix() + name);
+    return localStorage.getItem(this.prefix() + name);
   },
 
   delete(name) {
-    document.localStorage.removeItem(this.prefix() + name);
+    localStorage.removeItem(name);
   },
 
   exists(name) {
-    return isset(this.get(this.prefix() + name));
+    return isset(this.get(name));
   },
 
   setUtms(utmArray) {

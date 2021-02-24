@@ -117,8 +117,7 @@ var Cookie = {
   // throttle(name){
   //   this.set(name, 1, 10, window.location.pathname);
   // },
-  setUtms: function setUtms() {
-    var utmArray = ['utm_source', 'utm_medium', 'utm_term', 'utm_content', 'utm_campaign'];
+  setUtms: function setUtms(utmArray) {
     var exists = false;
 
     for (var i = 0, l = utmArray.length; i < l; i++) {
@@ -149,8 +148,7 @@ var Cookie = {
       return name in utms ? utms[name] : "";
     }
   },
-  setFms: function setFms() {
-    var fmArray = ['fm_click_id', 'fm_publisher_id', 'fm_conversion_id'];
+  setFms: function setFms(fmArray) {
     var exists = false;
 
     for (var i = 0, l = fmArray.length; i < l; i++) {
@@ -180,6 +178,123 @@ var Cookie = {
       var fms = JSON.parse(this.get('fm'));
       return name in fms ? fms[name] : "";
     }
+  }
+};
+var LocalStorage = {
+  prefix: function prefix() {
+    return '__' + pixelFuncName + '_';
+  },
+  set: function set(name, value) {
+    localStorage.setItem(this.prefix() + name, value);
+  },
+  get: function get(name) {
+    return localStorage.getItem(this.prefix() + name);
+  },
+  "delete": function _delete(name) {
+    localStorage.removeItem(name);
+  },
+  exists: function exists(name) {
+    return isset(this.get(name));
+  },
+  setUtms: function setUtms(utmArray) {
+    var exists = false;
+
+    for (var i = 0, l = utmArray.length; i < l; i++) {
+      if (isset(Url.getParameterByName(utmArray[i]))) {
+        exists = true;
+        break;
+      }
+    }
+
+    if (exists) {
+      var val,
+          save = {};
+
+      for (var i = 0, l = utmArray.length; i < l; i++) {
+        val = Url.getParameterByName(utmArray[i]);
+
+        if (isset(val)) {
+          save[utmArray[i]] = val;
+        }
+      }
+
+      this.set('utm', JSON.stringify(save));
+    }
+  },
+  getUtm: function getUtm(name) {
+    if (this.exists('utm')) {
+      var utms = JSON.parse(this.get('utm'));
+      return name in utms ? utms[name] : "";
+    }
+  },
+  setFms: function setFms(fmArray) {
+    var exists = false;
+
+    for (var i = 0, l = fmArray.length; i < l; i++) {
+      if (isset(Url.getParameterByName(fmArray[i]))) {
+        exists = true;
+        break;
+      }
+    }
+
+    if (exists) {
+      var val,
+          save = {};
+
+      for (var i = 0, l = fmArray.length; i < l; i++) {
+        val = Url.getParameterByName(fmArray[i]);
+
+        if (isset(val)) {
+          save[fmArray[i]] = val;
+        }
+      }
+
+      this.set('fm', JSON.stringify(save), 2 * 365 * 24 * 60);
+    }
+  },
+  getFm: function getFm(name) {
+    if (this.exists('fm')) {
+      var fms = JSON.parse(this.get('fm'));
+      return name in fms ? fms[name] : "";
+    }
+  }
+};
+var GeneralStorage = {
+  setUid: function setUid() {
+    var uid = Cookie.get('uid');
+
+    if (isset(uid) === false) {
+      uid = LocalStorage.get('uid');
+    }
+
+    if (isset(uid) === false) {
+      uid = guid();
+    }
+
+    Cookie.set('uid', uid, 2 * 365 * 24 * 60);
+    LocalStorage.set('uid', uid);
+  },
+  getUid: function getUid() {
+    var uid = Cookie.get('uid');
+    return isset(uid) === false ? LocalStorage.get('uid') : uid;
+  },
+  setUtms: function setUtms() {
+    var utmArray = ['utm_source', 'utm_medium', 'utm_term', 'utm_content', 'utm_campaign'];
+    Cookie.setUtms(utmArray);
+    LocalStorage.setUtms(utmArray);
+  },
+  getUtm: function getUtm(name) {
+    var utm = Cookie.getUtm(name);
+    return isset(utm) === false ? LocalStorage.getUtm(name) : utm;
+  },
+  setFms: function setFms() {
+    var fmArray = ['fm_click_id', 'fm_publisher_id', 'fm_conversion_id'];
+    Cookie.setFms(fmArray);
+    LocalStorage.setFms(fmArray);
+  },
+  getFm: function getFm(name) {
+    var fm = Cookie.getFm(name);
+    return isset(fm) === false ? LocalStorage.getFm(name) : fm;
   }
 };
 var Url = {
@@ -232,7 +347,7 @@ var Pixel = /*#__PURE__*/function () {
         },
         // website Id
         uid: function uid() {
-          return Cookie.get('uid');
+          return GeneralStorage.getUid();
         },
         // user Id
         ev: function ev() {
@@ -296,35 +411,35 @@ var Pixel = /*#__PURE__*/function () {
         },
         // timezone
         utm_source: function utm_source(key) {
-          return Cookie.getUtm(key);
+          return GeneralStorage.getUtm(key);
         },
         // get the utm source
         utm_medium: function utm_medium(key) {
-          return Cookie.getUtm(key);
+          return GeneralStorage.getUtm(key);
         },
         // get the utm medium
         utm_term: function utm_term(key) {
-          return Cookie.getUtm(key);
+          return GeneralStorage.getUtm(key);
         },
         // get the utm term
         utm_content: function utm_content(key) {
-          return Cookie.getUtm(key);
+          return GeneralStorage.getUtm(key);
         },
         // get the utm content
         utm_campaign: function utm_campaign(key) {
-          return Cookie.getUtm(key);
+          return GeneralStorage.getUtm(key);
         },
         // get the utm campaign
         fm_click_id: function fm_click_id(key) {
-          return Cookie.getFm(key);
+          return GeneralStorage.getFm(key);
         },
         // get the Feedmob Click Id
         fm_publisher_id: function fm_publisher_id(key) {
-          return Cookie.getFm(key);
+          return GeneralStorage.getFm(key);
         },
         // get the Feedmob Publisher Id
         fm_conversion_id: function fm_conversion_id(key) {
-          return Cookie.getFm(key);
+          return GeneralStorage.getFm(key);
         } // get the Feedmob Conversion Id
 
       };
@@ -369,11 +484,11 @@ var Pixel = /*#__PURE__*/function () {
 }(); // update the cookie if it exists, if it doesn't, create a new one, lasting 2 years
 
 
-Cookie.exists('uid') ? Cookie.set('uid', Cookie.get('uid'), 2 * 365 * 24 * 60) : Cookie.set('uid', guid(), 2 * 365 * 24 * 60); // save any utms through as session cookies
+GeneralStorage.setUid(); // save any utms through as session cookies (and backup to localStorage)
 
-Cookie.setUtms(); //save any feedmob parameters to cookies
+GeneralStorage.setUtms(); //save any feedmob parameters to cookies (and backup to localStorage)
 
-Cookie.setFms(); // process the queue and future incoming commands
+GeneralStorage.setFms(); // process the queue and future incoming commands
 
 pixelFunc.process = function (method, value, optional) {
   if (method == 'init') {
