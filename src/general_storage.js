@@ -20,7 +20,7 @@ var GeneralStorage = {
   },
 
   setUtms() {
-    var utmArray = ['utm_source','utm_medium','utm_term','utm_content','utm_campaign'];
+    var utmArray = ['utm_source','utm_medium','utm_term','utm_content','utm_campaign', 'utm_partner'];
 
     Cookie.setUtms(utmArray);
     LocalStorage.setUtms(utmArray);

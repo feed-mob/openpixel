@@ -279,7 +279,7 @@ var GeneralStorage = {
     return isset(uid) === false ? LocalStorage.get('uid') : uid;
   },
   setUtms: function setUtms() {
-    var utmArray = ['utm_source', 'utm_medium', 'utm_term', 'utm_content', 'utm_campaign'];
+    var utmArray = ['utm_source', 'utm_medium', 'utm_term', 'utm_content', 'utm_campaign', 'utm_partner'];
     Cookie.setUtms(utmArray);
     LocalStorage.setUtms(utmArray);
   },
@@ -430,6 +430,10 @@ var Pixel = /*#__PURE__*/function () {
           return GeneralStorage.getUtm(key);
         },
         // get the utm campaign
+        utm_partner: function utm_partner(key) {
+          return GeneralStorage.getUtm(key);
+        },
+        // get the utm partner
         fm_click_id: function fm_click_id(key) {
           return GeneralStorage.getFm(key);
         },

@@ -41,6 +41,7 @@ class Pixel {
       utm_term:     key => GeneralStorage.getUtm(key), // get the utm term
       utm_content:  key => GeneralStorage.getUtm(key), // get the utm content
       utm_campaign: key => GeneralStorage.getUtm(key), // get the utm campaign
+      utm_partner: key => GeneralStorage.getUtm(key), // get the utm partner
       fm_click_id:     key => GeneralStorage.getFm(key), // get the Feedmob Click Id
       fm_publisher_id: key => GeneralStorage.getFm(key), // get the Feedmob Publisher Id
       fm_conversion_id: key => GeneralStorage.getFm(key), // get the Feedmob Conversion Id

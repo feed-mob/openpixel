@@ -92,3 +92,4 @@ https://tracker.example.com/pixel.gif?id=R29X8&uid=1-ovbam3yz-iolwx617&ev=pagelo
 | utm_term     |                     | Campaign Term                                                   |
 | utm_content  |                     | Campaign Content                                                |
 | utm_campaign |                     | Campaign Name                                                   |
+| utm_partner  |                     | Partner Name `utm_partner=FeedMob`                              |
