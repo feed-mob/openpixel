@@ -23,9 +23,9 @@ Date/864e5),(c=t.getElementsByTagName(n)[0]).parentNode.insertBefore(p,c))}(wind
 
 - The Examples of Feedmob Pixel Events
 ```Javascript
-// Purchase Event 
-// '{ "amount": 100 }' -> 100 cents 
-// '{ "amount": 99.99 }' -> $99.99 
+// Purchase Event
+// '{ "amount": 100 }' -> 100 cents
+// '{ "amount": 99.99 }' -> $99.99
 fmpix('event', 'P', '{ "amount": 100 }')
 
 // Install Event
@@ -71,6 +71,7 @@ utm_medium
 utm_term
 utm_content
 utm_campaign
+utm_partner
 fm_click_id
 fm_publisher_id
 fm_conversion_id
