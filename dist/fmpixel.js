@@ -82,6 +82,8 @@ var Cookie = {
   set: function set(name, value, minutes) {
     var path = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : "/";
     var expires = "";
+    var host = document.location.hostname;
+    var domain = isNaN(host.substring(host.lastIndexOf('.'))) ? host.substring(host.substring(0, host.lastIndexOf('.')).lastIndexOf('.') + 1) : host;
 
     if (isset(minutes)) {
       var date = new Date();
@@ -89,7 +91,7 @@ var Cookie = {
       expires = "; expires=" + date.toGMTString();
     }
 
-    document.cookie = this.prefix() + name + "=" + value + expires + "; path=" + path + "; SameSite=Lax";
+    document.cookie = this.prefix() + name + "=" + value + expires + "; domain=." + domain + "; path=" + path + "; SameSite=Lax";
   },
   get: function get(name) {
     var name = this.prefix() + name + "=";
