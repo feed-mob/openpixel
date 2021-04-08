@@ -544,4 +544,4 @@ window.onload = function () {
     }.bind(aTags[i]));
   }
 };
-}(window, document, window["fmpix"], "fmpix", "https://pixel-api.feedmob.biz/tracker", 1));
+}(window, document, window["fmpix"], "fmpix", "https://stage-pixel-api.feedmob.info/tracker", 1));
