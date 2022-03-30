@@ -66,6 +66,7 @@ class Pixel {
     this.img.style.display = 'none';
     this.img.width = '1';
     this.img.height = '1';
+    this.img.alt = ' ';
     document.getElementsByTagName('body')[0].appendChild(this.img);
   }
 

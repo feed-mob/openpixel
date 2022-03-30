@@ -8,7 +8,7 @@ function _defineProperties(target, props) { for (var i = 0; i < props.length; i+
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 var Config = {
   id: '',
@@ -166,9 +166,7 @@ var Url = {
   }
 };
 
-var Pixel =
-/*#__PURE__*/
-function () {
+var Pixel = /*#__PURE__*/function () {
   function Pixel(event, timestamp, optional) {
     _classCallCheck(this, Pixel);
 
@@ -314,6 +312,7 @@ function () {
       this.img.style.display = 'none';
       this.img.width = '1';
       this.img.height = '1';
+      this.img.alt = ' ';
       document.getElementsByTagName('body')[0].appendChild(this.img);
     }
   }, {
