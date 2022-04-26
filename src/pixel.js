@@ -5,7 +5,7 @@ class Pixel {
     this.timestamp = timestamp;
     this.optional = optionalData(optional);
     this.buildParams();
-    this.send();
+    this.send(timestamp);
   }
 
   buildParams() {
@@ -56,22 +56,27 @@ class Pixel {
     }
   }
 
-  send() {
-    this.sendImage();
+  send(uid) {
+    this.sendImage(uid);
   }
 
   sendBeacon() {
     window.navigator.sendBeacon(this.getSourceUrl());
   }
 
-  sendImage() {
+  sendImage(uid) {
+    
+    this.iframe = document.createElement('iframe');
+    this.iframe.id = `pixel-${uid}`;
+    this.iframe.style.display = 'none';
+    document.getElementsByTagName('body')[0].appendChild(this.iframe);
+
     this.img = document.createElement('img');
     this.img.src = this.getSourceUrl();
     this.img.style.display = 'none';
     this.img.width = '1';
     this.img.height = '1';
-    this.img.alt = ' ';
-    document.getElementsByTagName('body')[0].appendChild(this.img);
+    this.iframe.contentDocument.body.appendChild(this.img);
   }
 
   getSourceUrl() {

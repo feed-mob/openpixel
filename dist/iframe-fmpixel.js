@@ -324,7 +324,7 @@ var Pixel = /*#__PURE__*/function () {
     this.timestamp = timestamp;
     this.optional = optionalData(optional);
     this.buildParams();
-    this.send(GeneralStorage.getUid());
+    this.send();
   }
 
   _createClass(Pixel, [{
@@ -461,8 +461,8 @@ var Pixel = /*#__PURE__*/function () {
     }
   }, {
     key: "send",
-    value: function send(uid) {
-      this.sendImage(uid);
+    value: function send() {
+      this.sendImage();
     }
   }, {
     key: "sendBeacon",
@@ -471,17 +471,13 @@ var Pixel = /*#__PURE__*/function () {
     }
   }, {
     key: "sendImage",
-    value: function sendImage(uid) {
+    value: function sendImage() {
       this.iframe = document.createElement('iframe');
-      this.iframe.id = "pixel-".concat(uid);
+      this.iframe.src = this.getSourceUrl();
       this.iframe.style.display = 'none';
+      this.iframe.width = '1';
+      this.iframe.height = '1';
       document.getElementsByTagName('body')[0].appendChild(this.iframe);
-      this.img = document.createElement('img');
-      this.img.src = this.getSourceUrl();
-      this.img.style.display = 'none';
-      this.img.width = '1';
-      this.img.height = '1';
-      this.iframe.contentDocument.body.appendChild(this.img);
     }
   }, {
     key: "getSourceUrl",
