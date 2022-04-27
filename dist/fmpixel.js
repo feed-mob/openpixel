@@ -324,7 +324,7 @@ var Pixel = /*#__PURE__*/function () {
     this.timestamp = timestamp;
     this.optional = optionalData(optional);
     this.buildParams();
-    this.send(GeneralStorage.getUid());
+    this.send(timestamp);
   }
 
   _createClass(Pixel, [{
