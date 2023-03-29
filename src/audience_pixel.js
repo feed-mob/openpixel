@@ -1,0 +1,71 @@
+class AudiencePixel {
+  constructor(event, timestamp, optional) {
+    this.params = [];
+    this.event = event;
+    this.timestamp = timestamp;
+    this.optional = optionalData(optional);
+    this.buildParams();
+    this.send();
+  }
+
+  buildParams() {
+    const attr = this.getAttribute();
+    for (var index in attr) {
+      if (attr.hasOwnProperty(index)) {
+        this.setParam(index, attr[index](index));
+      }
+    }
+  }
+
+  getAttribute() {
+    return {
+      id:           () => Config.id, // website Id
+      uid:          () => GeneralStorage.getUid(), // user Id
+      ev:           () => this.event, // event being triggered
+      ed:           () => this.optional, // any event data to pass along
+      v:            () => Config.version, // openpixel.js version
+      dl:           () => window.location.href, // document location
+      rl:           () => document.referrer, // referrer location
+      ts:           () => this.timestamp, // timestamp when event was triggered
+      de:           () => document.characterSet, // document encoding
+      sr:           () => window.screen.width + 'x' + window.screen.height, // screen resolution
+      vp:           () => window.innerWidth + 'x' + window.innerHeight, // viewport size
+      cd:           () => window.screen.colorDepth, // color depth
+      dt:           () => document.title, // document title
+      bn:           () => Browser.nameAndVersion(), // browser name and version number
+      md:           () => Browser.isMobile(), // is a mobile device?
+      ua:           () => Browser.userAgent(), // user agent
+      tz:           () => (new Date()).getTimezoneOffset(), // timezone
+    }
+  }
+
+  setParam(key, val) {
+    if (isset(val)) {
+      this.params.push(`${key}=${encodeURIComponent(val)}`);
+    } else {
+      this.params.push(`${key}=`);
+    }
+  }
+
+  send() {
+    this.sendImage();
+  }
+
+  sendBeacon() {
+    window.navigator.sendBeacon(this.getSourceUrl());
+  }
+
+  sendImage() {
+    this.img = document.createElement('img');
+    this.img.src = this.getSourceUrl();
+    this.img.style.display = 'none';
+    this.img.width = '1';
+    this.img.height = '1';
+    this.img.alt = ' ';
+    document.getElementsByTagName('body')[0].appendChild(this.img);
+  }
+
+  getSourceUrl() {
+    return `${pixelAudienceEndpoint}?${this.params.join('&')}`;
+  }
+}

@@ -18,6 +18,8 @@ pixelFunc.process = function(method, value, optional) {
     } else if(value != 'pageload' && value != 'pageclose'){
       new Pixel(value, now(), optional);
     }
+  } else if(method == 'new_audience') {
+    new AudiencePixel(value, now(), optional);
   }
 }
 
@@ -27,6 +29,8 @@ for (var i = 0, l = pixelFunc.queue.length; i < l; i++) {
 }
 
 window.addEventListener('unload', function() {
+  // skip pageload for test AudiencePixel
+  return;
   if (!Config.pageCloseOnce) {
     Config.pageCloseOnce = true;
     // set 10 minutes page close cookie

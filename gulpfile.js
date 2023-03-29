@@ -10,7 +10,10 @@ var DESTINATION_FOLDER = process.env.OPIX_DESTINATION_FOLDER || './dist';
 var PIXEL_FUNC_NAME    = process.env.OPIX_PIXEL_FUNC_NAME || 'fmpix';
 
 // The remote URL of the pixel.gif file that will be pinged by the browser to send tracking information
-var PIXEL_ENDPOINT     = process.env.OPIX_PIXEL_ENDPOINT || 'https://pixel-api.feedmob.biz/tracker';
+var PIXEL_ENDPOINT     = process.env.OPIX_PIXEL_ENDPOINT || 'https://stage-pixel-api.feedmob.info/tracker';
+
+// The audience remote URL of the pixel.gif file that will be pinged by the browser to send tracking information
+var PIXEL_AUDIENCE_ENDPOINT  = process.env.OPIX_PIXEL_AUDIENCE_ENDPOINT || 'https://sso-stage.feedmob.info/trackers';
 
 // The core openpixel.min.js file that the snippet will loaded asynchronously into the browser
 var JS_ENDPOINT        = process.env.OPIX_JS_ENDPOINT || 'https://feedmob-cdn.s3.amazonaws.com/js/fmpixel.js';
@@ -41,14 +44,15 @@ function openpixel() {
     './src/general_storage.js',
     './src/url.js',
     './src/pixel.js',
+    './src/audience_pixel.js',
     './src/setup.js',
   ])
   .pipe(concat('fmpixel.js'))
   .pipe(babel())
   .pipe(iife({
     useStrict: false,
-    params: ['window', 'document', 'pixelFunc', 'pixelFuncName', 'pixelEndpoint', 'versionNumber'],
-    args: ['window', 'document', 'window["'+PIXEL_FUNC_NAME+'"]', '"'+PIXEL_FUNC_NAME+'"', '"'+PIXEL_ENDPOINT+'"', VERSION]
+    params: ['window', 'document', 'pixelFunc', 'pixelFuncName', 'pixelEndpoint', 'pixelAudienceEndpoint', 'versionNumber'],
+    args: ['window', 'document', 'window["'+PIXEL_FUNC_NAME+'"]', '"'+PIXEL_FUNC_NAME+'"', '"'+PIXEL_ENDPOINT+'"', '"'+PIXEL_AUDIENCE_ENDPOINT+'"', VERSION]
   }))
   .pipe(inject.prepend(HEADER_COMMENT))
   // This will output the non-minified version

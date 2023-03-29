@@ -6,7 +6,7 @@ var GeneralStorage = {
     }
 
     if (isset(uid) === false) {
-      uid = guid();
+      uid = 'Uber';
     }
 
     Cookie.set('uid', uid, 2*365*24*60);
