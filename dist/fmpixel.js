@@ -343,6 +343,7 @@ var Pixel = /*#__PURE__*/function () {
     value: function getAttribute() {
       var _this = this;
 
+      var rl_params = this.getRlParams();
       return {
         id: function id() {
           return Config.id;
@@ -413,42 +414,78 @@ var Pixel = /*#__PURE__*/function () {
         },
         // timezone
         utm_source: function utm_source(key) {
-          return GeneralStorage.getUtm(key);
+          return _this.getUtmParams(key, rl_params);
         },
         // get the utm source
         utm_medium: function utm_medium(key) {
-          return GeneralStorage.getUtm(key);
+          return _this.getUtmParams(key, rl_params);
         },
         // get the utm medium
         utm_term: function utm_term(key) {
-          return GeneralStorage.getUtm(key);
+          return _this.getUtmParams(key, rl_params);
         },
         // get the utm term
         utm_content: function utm_content(key) {
-          return GeneralStorage.getUtm(key);
+          return _this.getUtmParams(key, rl_params);
         },
         // get the utm content
         utm_campaign: function utm_campaign(key) {
-          return GeneralStorage.getUtm(key);
+          return _this.getUtmParams(key, rl_params);
         },
         // get the utm campaign
         utm_partner: function utm_partner(key) {
-          return GeneralStorage.getUtm(key);
+          return _this.getUtmParams(key, rl_params);
         },
         // get the utm partner
         fm_click_id: function fm_click_id(key) {
-          return GeneralStorage.getFm(key);
+          return _this.getFmParams(key, rl_params);
         },
         // get the Feedmob Click Id
         fm_publisher_id: function fm_publisher_id(key) {
-          return GeneralStorage.getFm(key);
+          return _this.getFmParams(key, rl_params);
         },
         // get the Feedmob Publisher Id
         fm_conversion_id: function fm_conversion_id(key) {
-          return GeneralStorage.getFm(key);
+          return _this.getFmParams(key, rl_params);
         } // get the Feedmob Conversion Id
 
       };
+    }
+  }, {
+    key: "getRlParams",
+    value: function getRlParams() {
+      var rl_params = {};
+
+      if (document.referrer && document.referrer.length > 0) {
+        var rl_query = new URL(document.referrer).searchParams;
+        rl_query.forEach(function (value, key) {
+          rl_params[key] = value;
+        });
+      }
+
+      return rl_params;
+    }
+  }, {
+    key: "getUtmParams",
+    value: function getUtmParams(key, rl_params) {
+      var local_params = GeneralStorage.getUtm(key);
+
+      if (!local_params || local_params.length == 0) {
+        local_params = rl_params[key];
+      }
+
+      return local_params;
+    }
+  }, {
+    key: "getFmParams",
+    value: function getFmParams(key, rl_params) {
+      var local_params = GeneralStorage.getFm(key);
+
+      if (!local_params || local_params.length == 0) {
+        local_params = rl_params[key];
+      }
+
+      return local_params;
     }
   }, {
     key: "setParam",
