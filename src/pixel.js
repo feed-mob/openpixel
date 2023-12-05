@@ -18,6 +18,7 @@ class Pixel {
   }
 
   getAttribute() {
+    var rl_params = this.getRlParams();
     return {
       id:           () => Config.id, // website Id
       uid:          () => GeneralStorage.getUid(), // user Id
@@ -36,16 +37,43 @@ class Pixel {
       md:           () => Browser.isMobile(), // is a mobile device?
       ua:           () => Browser.userAgent(), // user agent
       tz:           () => (new Date()).getTimezoneOffset(), // timezone
-      utm_source:   key => GeneralStorage.getUtm(key), // get the utm source
-      utm_medium:   key => GeneralStorage.getUtm(key), // get the utm medium
-      utm_term:     key => GeneralStorage.getUtm(key), // get the utm term
-      utm_content:  key => GeneralStorage.getUtm(key), // get the utm content
-      utm_campaign: key => GeneralStorage.getUtm(key), // get the utm campaign
-      utm_partner: key => GeneralStorage.getUtm(key), // get the utm partner
-      fm_click_id:     key => GeneralStorage.getFm(key), // get the Feedmob Click Id
-      fm_publisher_id: key => GeneralStorage.getFm(key), // get the Feedmob Publisher Id
-      fm_conversion_id: key => GeneralStorage.getFm(key), // get the Feedmob Conversion Id
+      utm_source:   key => this.getUtmParams(key, rl_params), // get the utm source
+      utm_medium:   key => this.getUtmParams(key, rl_params), // get the utm medium
+      utm_term:     key => this.getUtmParams(key, rl_params), // get the utm term
+      utm_content:  key => this.getUtmParams(key, rl_params), // get the utm content
+      utm_campaign: key => this.getUtmParams(key, rl_params), // get the utm campaign
+      utm_partner: key => this.getUtmParams(key, rl_params), // get the utm partner
+      fm_click_id:     key => this.getFmParams(key, rl_params), // get the Feedmob Click Id
+      fm_publisher_id: key => this.getFmParams(key, rl_params), // get the Feedmob Publisher Id
+      fm_conversion_id: key => this.getFmParams(key, rl_params), // get the Feedmob Conversion Id
     }
+  }
+
+  getRlParams() {
+    var rl_params = {};
+    if(document.referrer && document.referrer.length > 0) {
+      var rl_query = new URL(document.referrer).searchParams;
+      rl_query.forEach((value, key) => {
+        rl_params[key] = value;
+      });
+    }
+    return rl_params;
+  }
+
+  getUtmParams(key, rl_params) {
+    var local_params = GeneralStorage.getUtm(key)
+    if (!local_params || local_params.length == 0) {
+      local_params = rl_params[key]
+    }
+    return local_params;
+  }
+
+  getFmParams(key, rl_params) {
+    var local_params = GeneralStorage.getFm(key)
+    if (!local_params || local_params.length == 0) {
+      local_params = rl_params[key]
+    }
+    return local_params;
   }
 
   setParam(key, val) {
