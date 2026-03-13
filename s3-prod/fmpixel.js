@@ -20,6 +20,9 @@ var isset = function isset(variable) {
 var now = function now() {
   return 1 * new Date();
 };
+var shouldSkipEventTracking = function shouldSkipEventTracking() {
+  return window.location.hostname === 'gtm-msr.appspot.com';
+};
 var guid = function guid() {
   return Config.version + '-xxxxxxxx-'.replace(/[x]/g, function (c) {
     var r = Math.random() * 36 | 0,
@@ -486,6 +489,9 @@ pixelFunc.process = function (method, value, optional) {
   if (method == 'init') {
     Config.id = value;
   } else if (method == 'event') {
+    if (shouldSkipEventTracking()) {
+      return;
+    }
     if (value == 'pageload' && !Config.pageLoadOnce) {
       Config.pageLoadOnce = true;
       // set 10 minutes page load cookie
@@ -502,6 +508,9 @@ for (var i = 0, l = pixelFunc.queue.length; i < l; i++) {
   pixelFunc.process.apply(pixelFunc, pixelFunc.queue[i]);
 }
 window.addEventListener('unload', function () {
+  if (shouldSkipEventTracking()) {
+    return;
+  }
   if (!Config.pageCloseOnce) {
     Config.pageCloseOnce = true;
     // set 10 minutes page close cookie
